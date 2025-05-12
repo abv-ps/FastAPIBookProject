@@ -25,6 +25,7 @@ This is a minimal FastAPI project demonstrating:
 
 docker-compose up --build
 
+
 2. Access services:
 
 The application will be available at: http://localhost:8000
