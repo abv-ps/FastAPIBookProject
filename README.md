@@ -28,9 +28,10 @@ docker-compose up --build
 
 2. Access services:
 
-The application will be available at: http://localhost:8000
+The application will be available at: http://localhost:7000
 
 ## API Endpoints
+
 ### Authors
 POST /authors/ — create a new author
 
@@ -47,3 +48,5 @@ DELETE /books/{id} — delete a book
 
 ### WebSocket
 GET /ws — connect to WebSocket server
+
+You can check the functionality at http://localhost:7000/docs after launch docker compose
