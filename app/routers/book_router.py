@@ -3,6 +3,7 @@ from app.crud.items import get_item, delete_item, list_items, update_item
 from app.crud.book import create_book
 from app.schemas.book import BookCreate, BookRead
 from app.models.book import Book
+from app.kafka.producer import kafka_producer
 
 router = APIRouter(prefix="/books", tags=["Books"])
 
@@ -10,7 +11,12 @@ router = APIRouter(prefix="/books", tags=["Books"])
 
 @router.post("/", response_model=Book)
 async def create(book: BookCreate, background_tasks: BackgroundTasks):
-    return await create_book(Book(**book.model_dump()), background_tasks)
+    result = await create_book(Book(**book.model_dump()), background_tasks)
+    await kafka_producer.send_event(
+        key="book_created",
+        payload={"book_id": result.book_id, "title": result.book_title}
+    )
+    return result
 
 
 @router.get("/", response_model=list[BookRead])
@@ -37,4 +43,8 @@ async def update(book_id: int, update_data: dict):
     updated = await update_item(Book, book_id, update_data)
     if not updated:
         raise HTTPException(status_code=404, detail="Book not found")
+    await kafka_producer.send_event(
+        key="book_updated",
+        payload={"book_id": updated.book_id, "title": updated.book_title}
+    )
     return updated

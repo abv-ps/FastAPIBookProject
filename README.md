@@ -5,7 +5,7 @@ This is a minimal FastAPI project demonstrating:
 - CRUD endpoints (GET, POST, PATCH, DELETE)
 - Many-to-Many relationship (Books ↔ Authors)
 - Background task example
-- WebSocket support
+- WebSocket support (in the pipeline)
 - Docker and Docker Compose setup
 
 ---
@@ -18,6 +18,10 @@ This is a minimal FastAPI project demonstrating:
     POSTGRES_PASSWORD=your_password
     POSTGRES_HOST=custom_postgres
     POSTGRES_PORT=5432
+
+    KAFKA_BROKER=kafka_broker
+    KAFKA_TOPIC=tracking_topic
+
 
 ---
 

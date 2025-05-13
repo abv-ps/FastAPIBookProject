@@ -11,14 +11,19 @@ from app.crud.author import create_author
 from app.models.author import Author
 from app.schemas.author import AuthorCreate, AuthorRead
 from app.schemas.book import BookRead
+from app.kafka.producer import kafka_producer
 
 router = APIRouter(prefix="/authors", tags=["Authors"])
 
 
 @router.post("/", response_model=AuthorCreate)
 async def create(author: AuthorCreate, background_tasks: BackgroundTasks):
-    return await create_author(Author(**author.model_dump()), background_tasks)
-
+    result = await create_author(Author(**author.model_dump()), background_tasks)
+    await kafka_producer.send_event(
+        key="author_created",
+        payload={"author_id": result.author_id, "name": result.author_name}
+    )
+    return result
 
 @router.get("/", response_model=list[AuthorRead])
 async def list_all():
@@ -44,6 +49,10 @@ async def update(author_id: int, update_data: dict):
     updated = await update_item(Author, author_id, update_data)
     if not updated:
         raise HTTPException(status_code=404, detail="Author not found")
+    await kafka_producer.send_event(
+        key="author_updated",
+        payload={"author_id": updated.author_id, "name": updated.author_name}
+    )
     return updated
 
 
