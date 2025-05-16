@@ -11,8 +11,6 @@ from app.routers.book_router import router as book_router
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    async with engine.begin() as conn:
-        await get_db()
     await kafka_producer.start()
     try:
         yield
