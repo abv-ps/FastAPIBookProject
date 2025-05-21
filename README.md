@@ -13,14 +13,18 @@ This is a minimal FastAPI project demonstrating:
 ## Initial project setup
 
 1. **Create a `.env` file** in the root directory with the following keys:
+    <pre>
     POSTGRES_DB=name_your_db
     POSTGRES_USER=your_user
     POSTGRES_PASSWORD=your_password
     POSTGRES_HOST=custom_postgres
     POSTGRES_PORT=5432
-
+    </pre>
+    ****Kafka producer (for listening events)****
+    <pre>
     KAFKA_BROKER=kafka_broker
     KAFKA_TOPIC=tracking_topic
+    </pre>
 
 
 ---
