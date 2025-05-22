@@ -7,8 +7,7 @@ services:
     env_file:
       - .env
     depends_on:
-      postgres-fastapi:
-        condition: service_healthy
+      - postgres-fastapi
     environment:
       KAFKA_BOOTSTRAP_SERVERS: ${KAFKA_BROKER}
     ports:
@@ -22,10 +21,9 @@ services:
       POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-    healthcheck:
-      test: [ "CMD", "pg_isready", "-U", "${POSTGRES_USER}" ]
-      interval: 5s
-      retries: 5
+    command: ["postgres", "-p", "5433"]
+    ports:
+      - "5433:5433"
     volumes:
       - mydbdata:/var/lib/postgresql/data
     networks:
